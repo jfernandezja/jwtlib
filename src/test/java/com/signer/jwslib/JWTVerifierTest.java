@@ -12,7 +12,7 @@ import java.security.KeyPairGenerator;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
 
-public class JWTGeneratorTest {
+public class JWTVerifierTest {
 	private static RSAPrivateKey privateKey;
 	private static RSAPublicKey publicKey;
 	
@@ -27,29 +27,31 @@ public class JWTGeneratorTest {
 	
     @Test(expected = IllegalArgumentException.class)
     public void testNullKey() throws Exception {
-    	JWTGenerator generator = new JWTGenerator(null, "issuer");
-    	generator.build("subject");
-    }
-    
-    @Test(expected = BadParamException.class)
-    public void testNullIssuer() throws Exception {
-    	JWTGenerator generator = new JWTGenerator(privateKey, null);
-    	generator.build("subject");
-    }
-    
-    @Test(expected = BadParamException.class)
-    public void testNullSubject() throws Exception {
     	JWTGenerator generator = new JWTGenerator(privateKey, "issuer");
-    	generator.build(null);
+    	String jwt = generator.build("subject");
+    	JWTVerifier verifier = new JWTVerifier(null);
+    	verifier.verify(jwt);
+    }
+    
+    @Test(expected = BadParamException.class)
+    public void testNulToken() throws Exception {
+    	JWTVerifier verifier = new JWTVerifier(publicKey);
+    	verifier.verify(null);
+    }
+    
+    @Test(expected = IllegalArgumentException.class)
+    public void testInvalidToken() throws Exception {
+    	JWTVerifier verifier = new JWTVerifier(publicKey);
+    	verifier.verify("invalid.token.null");
     }
     
     @Test
     public void testValidJwt() throws Exception {
     	JWTGenerator generator = new JWTGenerator(privateKey, "issuer");
     	String jwt = generator.build("subject");
-    	Assert.assertNotNull(jwt);
-    	Assert.assertFalse(jwt.isEmpty());
     	JWTVerifier verifier = new JWTVerifier(publicKey);
-    	verifier.verify(jwt);
+    	JWTVerifier.Claims claims = verifier.verify(jwt);
+    	Assert.assertEquals("issuer", claims.getIssuer());
+    	Assert.assertEquals("subject", claims.getSubject());
     }
 }
