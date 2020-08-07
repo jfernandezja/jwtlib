@@ -50,7 +50,7 @@ public class JWTGeneratorTest {
     	JWTGenerator generator = new JWTGenerator(privateKey, "issuer");
     	String jwt = generator.build("subject");
     	Assert.assertNotNull(jwt);
-    	Assert.assertTrue(jwt.isEmpty());
+    	Assert.assertFalse(jwt.isEmpty());
     	JWTVerifier verifier = new JWTVerifier(publicKey);
     	verifier.verify(jwt);
     }
