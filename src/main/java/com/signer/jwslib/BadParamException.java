@@ -9,4 +9,8 @@ public class BadParamException extends Exception {
 	public BadParamException(String message) {
 		super(message);
 	}
+	
+	public BadParamException(Throwable a) {
+		super(a);
+	}
 }
