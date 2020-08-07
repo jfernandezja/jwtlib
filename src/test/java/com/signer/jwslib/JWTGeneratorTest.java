@@ -29,7 +29,7 @@ public class JWTGeneratorTest {
 	
     @Test(expected = IllegalArgumentException.class)
     public void testNullKey() throws Exception {
-    	JWTGenerator generator = new JWTGenerator(null, "eissuer");
+    	JWTGenerator generator = new JWTGenerator(null, "issuer");
     	generator.build("subject");
     }
     
@@ -50,7 +50,7 @@ public class JWTGeneratorTest {
     	JWTGenerator generator = new JWTGenerator(privateKey, "issuer");
     	String jwt = generator.build("subject");
     	Assert.assertNotNull(jwt);
-    	Assert.assertFalse(jwt.isEmpty());
+    	Assert.assertTrue(jwt.isEmpty());
     	JWTVerifier verifier = new JWTVerifier(publicKey);
     	verifier.verify(jwt);
     }
