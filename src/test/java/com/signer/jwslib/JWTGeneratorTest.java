@@ -6,11 +6,13 @@ package com.signer.jwslib;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
+
 import java.lang.IllegalArgumentException;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
+import java.util.Base64;
 
 public class JWTGeneratorTest {
 	private static RSAPrivateKey privateKey;
@@ -27,7 +29,7 @@ public class JWTGeneratorTest {
 	
     @Test(expected = IllegalArgumentException.class)
     public void testNullKey() throws Exception {
-    	JWTGenerator generator = new JWTGenerator(null, "issuer");
+    	JWTGenerator generator = new JWTGenerator(null, "eissuer");
     	generator.build("subject");
     }
     
