@@ -51,7 +51,7 @@ public class JWTVerifierTest {
     	String jwt = generator.build("subject");
     	JWTVerifier verifier = new JWTVerifier(publicKey);
     	JWTVerifier.Claims claims = verifier.verify(jwt);
-    	Assert.assertEquals("issuer", claims.getIssuer());
+    	Assert.assertEquals("issuera", claims.getIssuer());
     	Assert.assertEquals("subject", claims.getSubject());
     }
 }
