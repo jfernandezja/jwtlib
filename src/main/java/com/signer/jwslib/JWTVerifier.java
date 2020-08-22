@@ -1,10 +1,12 @@
 package com.signer.jwslib;
 
 import java.security.interfaces.RSAPublicKey;
+import java.util.Map;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
 
 
@@ -14,11 +16,13 @@ public class JWTVerifier {
 	public class Claims {
 		private String issuer;
 		private String subject;
+		private Map<String,Claim> claims;
 		
-		private Claims(String issuer, String subject) {
+		private Claims(String issuer, String subject, Map<String,Claim> claims) {
 			super();
 			this.issuer = issuer;
 			this.subject = subject;
+			this.claims = claims;
 		}
 
 		public String getIssuer() {
@@ -27,6 +31,12 @@ public class JWTVerifier {
 
 		public String getSubject() {
 			return subject;
+		}
+		
+		public String get(String name) {
+			if(!claims.containsKey(name))
+				return null;
+			return claims.get(name).asString();
 		}
 		
 	}
@@ -42,7 +52,7 @@ public class JWTVerifier {
 		com.auth0.jwt.interfaces.JWTVerifier verifier = JWT.require(algorithm).build();
 		try {
 			DecodedJWT token = verifier.verify(jwt);
-			return new Claims(token.getIssuer(), token.getSubject());
+			return new Claims(token.getIssuer(), token.getSubject(), token.getClaims());
 		} catch(JWTVerificationException e) {
 			throw new InvalidJwtSignatureException(e);
 		}

@@ -25,6 +25,7 @@ public class JWTGenerator {
 	        .withIssuer(issuer)
 	        .withSubject(subject)
 	        .withIssuedAt(new Date())
+	        .withClaim("custom_claim", "wrong")
 	        .sign(algorithm);
 	}
 }
