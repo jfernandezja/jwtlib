@@ -3,16 +3,16 @@
  */
 package com.signer.jwslib;
 
-import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.Test;
-
-import java.lang.IllegalArgumentException;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
-import java.util.Base64;
+
+import org.junit.Assert;
+import org.junit.BeforeClass;
+import org.junit.Test;
+
+import com.signer.jwslib.JWTVerifier.Claims;
 
 public class JWTGeneratorTest {
 	private static RSAPrivateKey privateKey;
@@ -52,6 +52,7 @@ public class JWTGeneratorTest {
     	Assert.assertNotNull(jwt);
     	Assert.assertFalse(jwt.isEmpty());
     	JWTVerifier verifier = new JWTVerifier(publicKey);
-    	verifier.verify(jwt);
+    	Claims claims = verifier.verify(jwt);
+    	Assert.assertEquals("wrong", claims.get("custom_claim"));
     }
 }
